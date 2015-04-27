@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-''' A Pandoc filter that makes the LaTeX writer default to minted for code.
+''' A pandoc filter that has the LaTeX writer use minted for typesetting code.
 
 Usage:
     pandoc --filter ./minted.py -o myfile.tex myfile.md
@@ -7,8 +7,26 @@ Usage:
 
 from pandocfilters import toJSONFilter, RawBlock, RawInline
 
+def unpack(value, meta):
+    ''' Unpack the body and language of a pandoc code element.
+
+    Args:
+        value   contents of pandoc object
+        meta    document metadata
+    '''
+    [attrib, body] = value
+    try:
+        [_, [language, *_], _] = attrib
+    except ValueError:
+        # Use default language, or don't highlight.
+        language = meta.get('minted-language')
+        if language is not None:
+            language = language['c'][0]['c']
+
+    return body, language
+
 def minted(key, value, format, meta):
-    ''' Use minted environments for code blocks in LaTeX.
+    ''' Use minted for code in LaTeX.
 
     Args:
         key     type of pandoc object
@@ -18,32 +36,21 @@ def minted(key, value, format, meta):
     '''
     if format == 'latex':
         if key == 'CodeBlock':
-            [attrib, body] = value
-            try:
-                [_, [lang, *_], _] = attrib
-            except ValueError:
-                # Use default language, or don't highlight.
-                lang = meta.get('minted-language')
-                if lang is None:
-                    return
-                lang = lang['c'][0]['c']
+            body, language = unpack(value, meta)
+            if language is None:
+                return
 
-            begin = r'\begin{minted}{' + lang + '}\n'
+            begin = r'\begin{minted}{' + language + '}\n'
             end = '\n' + r'\end{minted}'
 
             return [RawBlock(format, begin + body + end)]
+
         elif key == 'Code':
-            [attrib, body] = value
-            try:
-                [_, [lang, *_], _] = attrib
-            except ValueError:
-                # Use default language, or don't highlight.
-                lang = meta.get('minted-language')
-                if lang is None:
-                    return
-                lang = lang['c'][0]['c']
+            body, language = unpack(value, meta)
+            if language is None:
+                return
             
-            begin = r'\mintinline{' + lang + '}{'
+            begin = r'\mintinline{' + language + '}{'
             end = '}'
 
             return [RawInline(format, begin + body + end)]
