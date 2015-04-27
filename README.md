@@ -8,5 +8,5 @@ Usage:
 
     pandoc --filter ./minted.py -o myfile.tex myfile.md
 
-Minted is only be used for code where the language has been specified; you can
+Minted is only used for code where the language has been specified; you can
 set a default language using the pandoc metadata field `minted-language`.
