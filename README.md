@@ -1,4 +1,4 @@
-# pandocfilters-minted
+# pandoc-minted
 
 A pandoc filter that has the LaTeX writer use [minted][] for typesetting code.
 
