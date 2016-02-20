@@ -4,9 +4,34 @@ A pandoc filter that has the LaTeX writer use [minted][] for typesetting code.
 
 [minted]: https://github.com/gpoore/minted
 
-Usage:
+# Installation
 
-    pandoc --filter ./minted.py -o myfile.tex myfile.md
+Clone this repository to somewhere safe:
 
-Minted is only used for code where the language has been specified; you can
-set a default language using the pandoc metadata field `minted-language`.
+```
+git clone https://github.com/nick-ulle/pandoc-minted.git
+```
+
+Then symlink to `pandoc-minted.py` from a `$PATH` directory:
+
+```
+cd pandoc-minted
+ln -rs pandoc-minted.py DIRECTORY/pandoc-minted
+```
+
+# Usage
+
+```
+pandoc --filter pandoc-minted -o myfile.tex myfile.md
+```
+
+When you don't set the language for a code block, pandoc-minted will default to
+`text`. You can change the default language with a Pandoc metadata block:
+
+```
+---
+pandoc-minted:
+  language: python
+---
+```
+
