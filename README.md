@@ -12,12 +12,15 @@ Clone this repository to somewhere safe:
 git clone https://github.com/nick-ulle/pandoc-minted.git
 ```
 
-Then symlink to `pandoc-minted.py` from a `$PATH` directory:
+Then create a symlink to `pandoc-minted.py` in a directory on the `$PATH`:
 
 ```
 cd pandoc-minted
 ln -rs pandoc-minted.py DIRECTORY/pandoc-minted
 ```
+
+Note that on OS X you must omit the `r` flag.
+
 
 # Usage
 
