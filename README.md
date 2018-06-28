@@ -1,4 +1,4 @@
-mac ln r option# pandoc-minted
+# pandoc-minted
 
 A pandoc filter that has the LaTeX writer use [minted][] for typesetting code.
 
